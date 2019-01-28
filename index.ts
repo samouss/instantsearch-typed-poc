@@ -45,7 +45,7 @@ interface SearchBoxConnectorParams extends WidgetConnectorParams {
 
 interface ConnectSearchBox {
   // How to make this generic?
-  <U extends SearchBoxConnectorParams = SearchBoxConnectorParams>(render: Render<SearchBoxRenderOptions<U>>, unmount: () => void): CreateWidget<U>;
+  <T>(render: Render<SearchBoxRenderOptions<SearchBoxConnectorParams & T>>, unmount: () => void): CreateWidget<SearchBoxConnectorParams & T>;
 }
 
 interface CustomSearchBoxWidgetParams extends SearchBoxConnectorParams {
@@ -104,12 +104,12 @@ customSearchBoxWithContainer({
  * Create widget
  */
 
+type CreateSearchBox = CreateWidget<SearchBoxWidgetParams>;
+
 interface SearchBoxWidgetParams extends SearchBoxConnectorParams {
   container: string | HTMLElement;
   placeholder: string;
 }
-
-type CreateSearchBox = CreateWidget<SearchBoxWidgetParams>;
 
 const searchBox: CreateSearchBox = ({ container, queryHook, ...rest }) => {
   const createWidget = connectSearchBox<SearchBoxWidgetParams>(
@@ -135,4 +135,40 @@ searchBox({
   queryHook(next, search) {
     search(next);
   },
+});
+
+/**
+ * Create widget with partial widget params
+ */
+
+type CreateSearchBoxQueryHook = CreateWidget<SearchBoxQueryHookWidgetParams>;
+
+interface SearchBoxQueryHookWidgetParams {
+  container: string | HTMLElement;
+  placeholder: string;
+}
+
+const searchBoxQueryHook: CreateSearchBoxQueryHook = ({ container, ...rest }) => {
+  const createWidget = connectSearchBox<SearchBoxQueryHookWidgetParams>(
+    ({ currentRefinement, refine, widgetParams }) => {
+      widgetParams.container
+      widgetParams.queryHook
+      widgetParams.placeholder
+      refine(currentRefinement);
+    },
+    () => {}
+  );
+
+  return createWidget({
+    ...rest,
+    container,
+    queryHook(next, search) {
+      search(next);
+    },
+  });
+};
+
+searchBoxQueryHook({
+  container: '#searchBox',
+  placeholder: 'Apple, iPhone, ...',
 });
