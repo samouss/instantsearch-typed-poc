@@ -28,9 +28,13 @@ type CreateWidget<T extends WidgetConnectorParams> = (widgetParams: T) => Widget
 type Renderer<T extends RenderOptions> = (renderOptions: T) => void;
 
 // Useless for now -> find out how to make it generic - ConnectSearchBox
-interface Connector<U extends WidgetConnectorParams, T extends RenderOptions<U>> {
-  <V>(render: Renderer<T>, unmount: () => void): CreateWidget<U>;
-}
+// interface Connector<U extends WidgetConnectorParams, T extends RenderOptions<U>> {
+//   <V>(render: Renderer<T>, unmount: () => void): CreateWidget<U>;
+// }
+
+// interface Connector<T extends WidgetConnectorParams, U<V> extends RenderOptions<V>> {
+//   <W>(render: Renderer<U<W>>, unmount: () => void): CreateWidget<T & W>;
+// }
 
 // ------
 
