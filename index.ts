@@ -43,9 +43,12 @@ interface SearchBoxConnectorParams extends WidgetConnectorParams {
   queryHook: (value: string, search: (value: string) => void) => void;
 }
 
+// How to infer this from the connector? We can use namespace?
+type SearchBoxRenderer<T> = Renderer<SearchBoxRenderOptions<SearchBoxConnectorParams & T>>
+
 interface ConnectSearchBox {
   // How to make this generic?
-  <T>(render: Renderer<SearchBoxRenderOptions<SearchBoxConnectorParams & T>>, unmount: () => void): CreateWidget<SearchBoxConnectorParams & T>;
+  <T>(render: SearchBoxRenderer<T>, unmount: () => void): CreateWidget<SearchBoxConnectorParams & T>;
 }
 
 interface CustomSearchBoxWidgetParams extends SearchBoxConnectorParams {
@@ -111,14 +114,17 @@ interface SearchBoxWidgetParams extends SearchBoxConnectorParams {
   placeholder: string;
 }
 
+const renderSearchBox: SearchBoxRenderer<SearchBoxWidgetParams> = ({ currentRefinement, refine, widgetParams }) => {
+  widgetParams.container
+  widgetParams.queryHook
+  widgetParams.placeholder
+  refine(currentRefinement);
+};
+
 const searchBox: CreateSearchBox = ({ container, queryHook, ...rest }) => {
+  // It would be nice to infer the type from the one above
   const createWidget = connectSearchBox<SearchBoxWidgetParams>(
-    ({ currentRefinement, refine, widgetParams }) => {
-      widgetParams.container
-      widgetParams.queryHook
-      widgetParams.placeholder
-      refine(currentRefinement);
-    },
+    renderSearchBox,
     () => {}
   );
 
@@ -148,14 +154,16 @@ interface SearchBoxQueryHookWidgetParams {
   placeholder: string;
 }
 
+const renderSearchBoxWithQueryHook: SearchBoxRenderer<SearchBoxQueryHookWidgetParams>= ({ currentRefinement, refine, widgetParams }) => {
+  widgetParams.container
+  widgetParams.queryHook
+  widgetParams.placeholder
+  refine(currentRefinement);
+};
+
 const searchBoxQueryHook: CreateSearchBoxQueryHook = ({ container, ...rest }) => {
   const createWidget = connectSearchBox<SearchBoxQueryHookWidgetParams>(
-    ({ currentRefinement, refine, widgetParams }) => {
-      widgetParams.container
-      widgetParams.queryHook
-      widgetParams.placeholder
-      refine(currentRefinement);
-    },
+    renderSearchBoxWithQueryHook,
     () => {}
   );
 
