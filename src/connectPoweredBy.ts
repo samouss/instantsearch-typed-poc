@@ -11,7 +11,7 @@ export interface PoweredByConnectorParams extends WidgetConnectorParams {
 export type PoweredByRenderer<T> = Renderer<PoweredByRenderOptions<PoweredByConnectorParams & T>>
 export type CreatePoweredBy<T> = CreateWidget<PoweredByConnectorParams & T>;
 
-export interface ConnectPoweredBy {
+interface ConnectPoweredBy {
   // How to make this generic?
   <T>(render: PoweredByRenderer<T>, unmount: () => void): CreatePoweredBy<T>;
 }

@@ -13,7 +13,7 @@ export interface SearchBoxConnectorParams extends WidgetConnectorParams {
 export type SearchBoxRenderer<T> = Renderer<SearchBoxRenderOptions<SearchBoxConnectorParams & T>>
 export type CreateSearchBox<T> = CreateWidget<SearchBoxConnectorParams & T>;
 
-export interface ConnectSearchBox {
+interface ConnectSearchBox {
   // How to make this generic?
   <T>(render: SearchBoxRenderer<T>, unmount: () => void): CreateSearchBox<T>
 }
