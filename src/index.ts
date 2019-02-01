@@ -32,6 +32,10 @@ export interface Refinable<T> {
   refine(input: T): void;
 }
 
+export interface URLSyncable<T> {
+  createURL(input: T): string;
+}
+
 // Useless for now -> find out how to make it generic - ConnectSearchBox
 // interface Connector<U extends WidgetConnectorParams, T extends RenderOptions<U>> {
 //   <V>(render: Renderer<T>, unmount: () => void): CreateWidget<U>;

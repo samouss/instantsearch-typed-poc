@@ -1,6 +1,6 @@
-import { RenderOptions, Renderer, CreateWidget, Refinable } from './index'
+import { RenderOptions, Renderer, CreateWidget, Refinable, URLSyncable } from './index'
 
-export interface SearchBoxRenderOptions<T> extends RenderOptions<T>, Refinable<string> {
+export interface SearchBoxRenderOptions<T> extends RenderOptions<T>, Refinable<string>, URLSyncable<string> {
   currentRefinement: string;
 }
 
@@ -27,6 +27,7 @@ export const connectSearchBox: ConnectSearchBox = (render, dispose) => {
         render({
           currentRefinement: 'Hello',
           refine: (value) => helper.setQuery(value).search(),
+          createURL: (value) => value,
           instantSearchInstance: null,
           widgetParams,
         })
