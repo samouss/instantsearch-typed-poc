@@ -28,6 +28,10 @@ export type CreateWidget<T> = (widgetParams: T) => Widget;
 
 export type Renderer<T extends RenderOptions> = (renderOptions: T /*, isFirstRender: boolean */) => void;
 
+export interface Refinable<T> {
+  refine(input: T): void;
+}
+
 // Useless for now -> find out how to make it generic - ConnectSearchBox
 // interface Connector<U extends WidgetConnectorParams, T extends RenderOptions<U>> {
 //   <V>(render: Renderer<T>, unmount: () => void): CreateWidget<U>;
