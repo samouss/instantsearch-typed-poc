@@ -37,46 +37,47 @@ export type Renderer<T extends RenderOptions> = (renderOptions: T) => void;
 // }
 
 /**
- * ConnectSearchBox
+ * Create widget
  */
 
-interface SearchBoxRenderOptions<T> extends RenderOptions<T> {
-  currentRefinement: string;
-  refine: (value: string) => void;
-}
+import { searchBox } from './searchBox'
+import { poweredBy } from './poweredBy';
 
-interface SearchBoxConnectorParams extends WidgetConnectorParams {
-  queryHook: (value: string, search: (value: string) => void) => void;
-}
+searchBox({
+  container: '#searchBox',
+  placeholder: 'Apple, iPhone, ...',
+  queryHook(next, search) {
+    search(next);
+  },
+});
 
-// How to infer this from the connector? We can use namespace?
-type SearchBoxRenderer<T> = Renderer<SearchBoxRenderOptions<SearchBoxConnectorParams & T>>
+poweredBy({
+  container: '#searchBox',
+  url: '/hello',
+});
 
-interface ConnectSearchBox {
-  // How to make this generic?
-  <T>(render: SearchBoxRenderer<T>, unmount: () => void): CreateWidget<SearchBoxConnectorParams & T>;
-}
+/**
+ * Create widget with partial widget params
+ */
 
-interface CustomSearchBoxWidgetParams extends SearchBoxConnectorParams {
-  container: string;
-}
+import { searchBoxQueryHook } from './searchBoxWithPartialApplication';
+import { poweredByWithURL } from './poweredByWithPartialApplication';
 
-const connectSearchBox: ConnectSearchBox = (render, dispose) => {
-  return (widgetParams) => {
-    // widgetParams.container
-    widgetParams.queryHook
+searchBoxQueryHook({
+  container: '#searchBox',
+  placeholder: 'Apple, iPhone, ...',
+});
 
-    return ({
-      render() {
-        render({
-          currentRefinement: 'Hello',
-          refine: (value: string) => {},
-          instantSearchInstance: null,
-          widgetParams,
-        })
-      },
-  })};
-}
+poweredByWithURL({
+  container: '#searchBox',
+});
+
+/**
+ * Custom with default
+ */
+
+import { connectPoweredBy, PoweredByConnectorParams } from './connectPoweredBy';
+import { connectSearchBox, SearchBoxConnectorParams } from './connectSearchBox';
 
 const customSearchBox = connectSearchBox(
   ({ currentRefinement, refine, widgetParams }) => {
@@ -92,127 +93,6 @@ customSearchBox({
     search(next);
   },
 });
-
-const customSearchBoxWithContainer = connectSearchBox<CustomSearchBoxWidgetParams>(
-  ({ currentRefinement, refine, widgetParams }) => {
-    widgetParams.container;
-    widgetParams.queryHook;
-    refine(currentRefinement);
-  },
-  () => {}
-);
-
-customSearchBoxWithContainer({
-  container: '#searchBox',
-  queryHook(next, search) {
-    search(next);
-  },
-});
-
-/**
- * Create widget
- */
-
-type CreateSearchBox = CreateWidget<SearchBoxWidgetParams>;
-
-interface SearchBoxWidgetParams extends SearchBoxConnectorParams {
-  container: string | HTMLElement;
-  placeholder: string;
-}
-
-const renderSearchBox: SearchBoxRenderer<SearchBoxWidgetParams> = ({ currentRefinement, refine, widgetParams }) => {
-  widgetParams.container
-  widgetParams.queryHook
-  widgetParams.placeholder
-  refine(currentRefinement);
-};
-
-const searchBox: CreateSearchBox = ({ container, queryHook, ...rest }) => {
-  // It would be nice to infer the type from the one above
-  const createWidget = connectSearchBox<SearchBoxWidgetParams>(
-    renderSearchBox,
-    () => {}
-  );
-
-  return createWidget({
-    ...rest,
-    container,
-    queryHook,
-  });
-};
-
-searchBox({
-  container: '#searchBox',
-  placeholder: 'Apple, iPhone, ...',
-  queryHook(next, search) {
-    search(next);
-  },
-});
-
-/**
- * Create widget with partial widget params
- */
-
-type CreateSearchBoxQueryHook = CreateWidget<SearchBoxQueryHookWidgetParams>;
-
-interface SearchBoxQueryHookWidgetParams {
-  container: string | HTMLElement;
-  placeholder: string;
-}
-
-const renderSearchBoxWithQueryHook: SearchBoxRenderer<SearchBoxQueryHookWidgetParams>= ({ currentRefinement, refine, widgetParams }) => {
-  widgetParams.container
-  widgetParams.queryHook
-  widgetParams.placeholder
-  refine(currentRefinement);
-};
-
-const searchBoxQueryHook: CreateSearchBoxQueryHook = ({ container, ...rest }) => {
-  const createWidget = connectSearchBox<SearchBoxQueryHookWidgetParams>(
-    renderSearchBoxWithQueryHook,
-    () => {}
-  );
-
-  return createWidget({
-    ...rest,
-    container,
-    queryHook(next, search) {
-      search(next);
-    },
-  });
-};
-
-searchBoxQueryHook({
-  container: '#searchBox',
-  placeholder: 'Apple, iPhone, ...',
-});
-
-/**
- * Create widget
- */
-
-import { poweredBy } from './poweredBy';
-
-poweredBy({
-  container: '#searchBox',
-  url: '/hello',
-});
-
-/**
- * Create widget with partial widget params
- */
-
-import { poweredByWithURL } from './poweredByWithPartialApplication';
-
-poweredByWithURL({
-  container: '#searchBox',
-});
-
-/**
- * Custom with default
- */
-
-import { connectPoweredBy, PoweredByConnectorParams } from './connectPoweredBy';
 
 const customPoweredBy = connectPoweredBy(
   ({ url, widgetParams }) => {
@@ -230,6 +110,26 @@ customPoweredBy({
 /**
  * Custom with custom widget params
  */
+
+interface CustomSearchBoxWidgetParams extends SearchBoxConnectorParams {
+  container: string;
+}
+
+const customSearchBoxWithContainer = connectSearchBox<CustomSearchBoxWidgetParams>(
+  ({ currentRefinement, refine, widgetParams }) => {
+    widgetParams.container;
+    widgetParams.queryHook;
+    refine(currentRefinement);
+  },
+  () => {}
+);
+
+customSearchBoxWithContainer({
+  container: '#searchBox',
+  queryHook(next, search) {
+    search(next);
+  },
+});
 
 interface CustomPoweredByWidgetParams extends PoweredByConnectorParams {
   container: string;
