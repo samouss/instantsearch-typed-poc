@@ -1,11 +1,11 @@
-import { RenderOptions, WidgetConnectorParams, Renderer, CreateWidget } from './index';
+import { RenderOptions, Renderer, CreateWidget } from './index';
 
 export interface SearchBoxRenderOptions<T> extends RenderOptions<T> {
   currentRefinement: string;
   refine: (value: string) => void;
 }
 
-export interface SearchBoxConnectorParams extends WidgetConnectorParams {
+export interface SearchBoxConnectorParams {
   queryHook: (value: string, search: (value: string) => void) => void;
 }
 

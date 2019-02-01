@@ -1,13 +1,14 @@
-import { RenderOptions, WidgetConnectorParams, Renderer, CreateWidget } from './index';
+import { RenderOptions, Renderer, CreateWidget } from './index';
 
 export interface PoweredByRenderOptions<T> extends RenderOptions<T> {
   url: string;
 }
 
-export interface PoweredByConnectorParams extends WidgetConnectorParams {
+export interface PoweredByConnectorParams {
   url: string;
 }
 
+// How to infer this from the connector? We can use namespace?
 export type PoweredByRenderer<T> = Renderer<PoweredByRenderOptions<PoweredByConnectorParams & T>>
 export type CreatePoweredBy<T> = CreateWidget<PoweredByConnectorParams & T>;
 

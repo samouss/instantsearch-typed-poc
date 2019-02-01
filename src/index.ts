@@ -19,13 +19,9 @@ export interface RenderOptions<T = unknown> {
   instantSearchInstance: InstantSearch;
 }
 
-export interface WidgetConnectorParams {
-  // common attributes
-}
+export type CreateWidget<T> = (widgetParams: T) => Widget;
 
-export type CreateWidget<T extends WidgetConnectorParams> = (widgetParams: T) => Widget;
-
-export type Renderer<T extends RenderOptions> = (renderOptions: T) => void;
+export type Renderer<T extends RenderOptions> = (renderOptions: T /*, isFirstRender: boolean */) => void;
 
 // Useless for now -> find out how to make it generic - ConnectSearchBox
 // interface Connector<U extends WidgetConnectorParams, T extends RenderOptions<U>> {
