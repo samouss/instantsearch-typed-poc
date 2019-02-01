@@ -1,6 +1,11 @@
 type InstantSearch = any;
+type Helper = any;
 type SearchParameters = any;
-type WidgetArgs = any;
+
+interface WidgetArgs {
+  helper: Helper,
+  instantSearchInstance: InstantSearch
+};
 
 export interface Widget {
   render(options: WidgetArgs): void;
