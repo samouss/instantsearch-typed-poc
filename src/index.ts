@@ -2,7 +2,7 @@ type InstantSearch = any;
 type SearchParameters = any;
 type WidgetArgs = any;
 
-interface Widget {
+export interface Widget {
   render(options: WidgetArgs): void;
   init?(options: WidgetArgs): void;
   getConfiguration?(previous: SearchParameters): SearchParameters;
@@ -14,18 +14,18 @@ interface Widget {
  * Connector
  */
 
-interface RenderOptions<T = unknown> {
+export interface RenderOptions<T = unknown> {
   widgetParams: T;
   instantSearchInstance: InstantSearch;
 }
 
-interface WidgetConnectorParams {
+export interface WidgetConnectorParams {
   // common attributes
 }
 
-type CreateWidget<T extends WidgetConnectorParams> = (widgetParams: T) => Widget;
+export type CreateWidget<T extends WidgetConnectorParams> = (widgetParams: T) => Widget;
 
-type Renderer<T extends RenderOptions> = (renderOptions: T) => void;
+export type Renderer<T extends RenderOptions> = (renderOptions: T) => void;
 
 // Useless for now -> find out how to make it generic - ConnectSearchBox
 // interface Connector<U extends WidgetConnectorParams, T extends RenderOptions<U>> {
@@ -110,73 +110,6 @@ customSearchBoxWithContainer({
 });
 
 /**
- * ConnectPoweredBy
- */
-
-interface PoweredByRenderOptions<T> extends RenderOptions<T> {
-  url: string;
-}
-
-interface PoweredByConnectorParams extends WidgetConnectorParams {
-  url: string;
-}
-
-// How to infer this from the connector? We can use namespace?
-type PoweredByRenderer<T> = Renderer<PoweredByRenderOptions<PoweredByConnectorParams & T>>
-
-interface ConnectPoweredBy {
-  // How to make this generic?
-  <T>(render: PoweredByRenderer<T>, unmount: () => void): CreateWidget<PoweredByConnectorParams & T>;
-}
-
-interface CustomPoweredByWidgetParams extends PoweredByConnectorParams {
-  container: string;
-}
-
-const connectPoweredBy: ConnectPoweredBy = (render, dispose) => {
-  return (widgetParams) => {
-    // widgetParams.container
-    widgetParams.url
-
-    return ({
-      render() {
-        render({
-          url: '/hello',
-          instantSearchInstance: null,
-          widgetParams,
-        })
-      },
-  })};
-}
-
-const customPoweredBy = connectPoweredBy(
-  ({ url, widgetParams }) => {
-    // widgetParams.container;
-    url;
-    widgetParams.url;
-  },
-  () => {}
-);
-
-customPoweredBy({
-  url: '/instantsearch'
-});
-
-const customPoweredByWithContainer = connectPoweredBy<CustomPoweredByWidgetParams>(
-  ({ url, widgetParams }) => {
-    widgetParams.container;
-    widgetParams.url;
-    url;
-  },
-  () => {}
-);
-
-customPoweredByWithContainer({
-  container: '#searchBox',
-  url: '/instantsearch',
-});
-
-/**
  * Create widget
  */
 
@@ -258,65 +191,60 @@ searchBoxQueryHook({
  * Create widget
  */
 
-type CreatePoweredBy = CreateWidget<PoweredByWidgetParams>;
-
-interface PoweredByWidgetParams extends PoweredByConnectorParams {
-  container: string | HTMLElement;
-}
-
-const renderPoweredBy: PoweredByRenderer<PoweredByWidgetParams>= ({ url, widgetParams }) => {
-  widgetParams.container
-  widgetParams.url
-  url
-};
-
-const poweredBy: CreatePoweredBy = ({ container, url, ...rest }) => {
-  const createWidget = connectPoweredBy<PoweredByWidgetParams>(
-    renderPoweredBy,
-    () => {}
-  );
-
-  return createWidget({
-    ...rest,
-    container,
-    url,
-  });
-};
+import { poweredBy } from './poweredBy';
 
 poweredBy({
   container: '#searchBox',
-  url: '/instantseach',
+  url: '/hello',
 });
 
 /**
  * Create widget with partial widget params
  */
 
-type CreatePoweredByWithURL = CreateWidget<PoweredByWithURLWidgetParams>;
-
-interface PoweredByWithURLWidgetParams {
-  container: string | HTMLElement;
-}
-
-const renderPoweredByWithURL: PoweredByRenderer<PoweredByWithURLWidgetParams>= ({ url, widgetParams }) => {
-  widgetParams.container
-  widgetParams.url
-  url
-};
-
-const poweredByWithURL: CreatePoweredByWithURL = ({ container, ...rest }) => {
-  const createWidget = connectPoweredBy<PoweredByWithURLWidgetParams>(
-    renderPoweredBy,
-    () => {}
-  );
-
-  return createWidget({
-    ...rest,
-    url: '/instantsearch',
-    container,
-  });
-};
+import { poweredByWithURL } from './poweredByWithPartialApplication';
 
 poweredByWithURL({
   container: '#searchBox',
+});
+
+/**
+ * Custom with default
+ */
+
+import { connectPoweredBy, PoweredByConnectorParams } from './connectPoweredBy';
+
+const customPoweredBy = connectPoweredBy(
+  ({ url, widgetParams }) => {
+    // widgetParams.container;
+    url;
+    widgetParams.url;
+  },
+  () => {}
+);
+
+customPoweredBy({
+  url: '/instantsearch'
+});
+
+/**
+ * Custom with custom widget params
+ */
+
+interface CustomPoweredByWidgetParams extends PoweredByConnectorParams {
+  container: string;
+}
+
+const customPoweredByWithContainer = connectPoweredBy<CustomPoweredByWidgetParams>(
+  ({ url, widgetParams }) => {
+    widgetParams.container;
+    widgetParams.url;
+    url;
+  },
+  () => {}
+);
+
+customPoweredByWithContainer({
+  container: '#searchBox',
+  url: '/instantsearch',
 });
