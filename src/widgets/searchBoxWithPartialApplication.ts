@@ -1,5 +1,5 @@
-import { connectSearchBox, SearchBoxRenderer } from './connectSearchBox';
-import { CreateWidget } from './index'
+import { connectSearchBox, SearchBoxRenderer } from '../connectors';
+import { CreateWidget } from '../types'
 
 interface SearchBoxQueryHookWidgetParams {
   container: string | HTMLElement;

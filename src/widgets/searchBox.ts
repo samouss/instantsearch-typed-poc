@@ -1,5 +1,5 @@
-import { connectSearchBox, SearchBoxConnectorParams, SearchBoxRenderer } from './connectSearchBox'
-import { CreateWidget } from './index'
+import { connectSearchBox, SearchBoxConnectorParams, SearchBoxRenderer } from '../connectors'
+import { CreateWidget } from '../types'
 
 interface SearchBoxWidgetParams extends SearchBoxConnectorParams {
   container: string | HTMLElement;

@@ -1,5 +1,5 @@
-import { connectPoweredBy, PoweredByRenderer, PoweredByConnectorParams } from './connectPoweredBy';
-import { CreateWidget } from './index';
+import { connectPoweredBy, PoweredByRenderer, PoweredByConnectorParams } from '../connectors';
+import { CreateWidget } from '../types';
 
 interface PoweredByWidgetParams extends PoweredByConnectorParams {
   container: string | HTMLElement;

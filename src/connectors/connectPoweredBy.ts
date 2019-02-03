@@ -1,4 +1,4 @@
-import { RenderOptions, Renderer, CreateWidget } from './index';
+import { RenderOptions, Renderer, CreateWidget } from '../types';
 
 export interface PoweredByRenderOptions<T> extends RenderOptions<T> {
   url: string;

@@ -1,5 +1,5 @@
-import { connectPoweredBy, PoweredByRenderer } from './connectPoweredBy';
-import { CreateWidget } from './index';
+import { connectPoweredBy, PoweredByRenderer } from '../connectors';
+import { CreateWidget } from '../types';
 
 export type CreatePoweredByWithURL = CreateWidget<PoweredByWithURLWidgetParams>;
 

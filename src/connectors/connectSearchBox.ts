@@ -1,4 +1,4 @@
-import { RenderOptions, Renderer, CreateWidget, Refinable, URLSyncable } from './index'
+import { RenderOptions, Renderer, CreateWidget, Refinable, URLSyncable } from '../types'
 
 export interface SearchBoxRenderOptions<T> extends RenderOptions<T>, Refinable<string>, URLSyncable<string> {
   currentRefinement: string;
